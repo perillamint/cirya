@@ -18,6 +18,11 @@ defmodule Hedwig.Adapters.Telegram do
     {:noreply, state}
   end
 
+  def handle_cast({:reply, msg = %Hedwig.Message{}}, state) do
+    Nadia.send_message(msg.room, msg.text)
+    {:noreply, state}
+  end
+
   def handle_info({:message, raw_msg}, state) do
     msgtype = 'groupchat' # TODO: Use raw_msg to get this info
     user = %Hedwig.User{
@@ -32,8 +37,9 @@ defmodule Hedwig.Adapters.Telegram do
     text = raw_msg.text # TODO: Append group title to text
 
     msg = %Hedwig.Message{
-      ref: raw_msg.message_id,
+      ref: make_ref(),
       room: raw_msg.chat.id,
+      robot: state.robot,
       user: user,
       text: text,
       type: msgtype

@@ -30,7 +30,7 @@ defmodule Hedwig.Adapters.Telegram.TelegramServer do
     {:stop, {:error, :unknownmsg}, state}
   end
 
-  def handle_cast({:message, message}, state) do
+  def handle_cast({:message, message = %Hedwig.Message{}}, state) do
     {:noreply, state}
   end
 
