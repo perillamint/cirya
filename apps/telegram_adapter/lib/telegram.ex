@@ -5,14 +5,15 @@ defmodule Hedwig.Adapters.Telegram.TelegramServer do
   @lptimeout 5000
 
   defmodule State do
-    defstruct offset: nil
+    defstruct parent: nil,
+      offset: nil
   end
 
   def start_link(args) do
-    GenServer.start_link(__MODULE__, [args], [{:name, __MODULE__}])
+    GenServer.start_link(__MODULE__, [self(), args], [{:name, __MODULE__}])
   end
 
-  def init([config]) do
+  def init([parent, config]) do
     {:ok, updates} = Nadia.get_updates(offset: -1, limit: 1);
 
     offset = case updates do
@@ -22,7 +23,7 @@ defmodule Hedwig.Adapters.Telegram.TelegramServer do
                  lastmsg.update_id + 1
              end
 
-    {:ok, %State{offset: offset}, @timeout}
+    {:ok, %State{parent: parent, offset: offset}, @timeout}
   end
 
   def handle_call(_, _, state) do
@@ -36,7 +37,9 @@ defmodule Hedwig.Adapters.Telegram.TelegramServer do
   def handle_info(timeout, state) do
     {:ok, updates} = Nadia.get_updates(offset: state.offset, timeout: @lptimeout)
 
-    IO.inspect(updates);
+   updates |> Enum.each(fn(update) ->
+      send(state.parent, {:message, update.message})
+    end)
 
     # Update state offset
     offset = case Enum.take(updates, -1) do

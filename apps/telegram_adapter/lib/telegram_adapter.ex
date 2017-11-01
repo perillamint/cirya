@@ -9,6 +9,7 @@ defmodule Hedwig.Adapters.Telegram do
   end
 
   def init({robot, opts}) do
+    Hedwig.Adapters.Telegram.TelegramServer.start_link([])
     {:ok, %State{opts: opts, robot: robot}}
   end
 
@@ -17,17 +18,26 @@ defmodule Hedwig.Adapters.Telegram do
 
   def handle_info({:message, raw_msg}, state) do
     msgtype = 'groupchat' # TODO: Use raw_msg to get this info
-    user = raw_msg.from.username # TODO: Fallback to first_name
+    user = %Hedwig.User{
+      id: raw_msg.from.username,
+      name: case raw_msg.from.last_name do
+              nil ->
+                raw_msg.from.first_name
+              last_name ->
+                raw_msg.from.first_name <> " " <> raw_msg.from.last_name
+            end
+    }
     text = raw_msg.text # TODO: Append group title to text
 
     msg = %Hedwig.Message{
       ref: raw_msg.message_id,
       room: raw_msg.chat.id,
+      user: user,
       text: text,
       type: msgtype
     }
 
-    Hedwig.Robot.handle_message(state.robot, msg);
+    Hedwig.Robot.handle_in(state.robot, msg);
     {:noreply, state}
   end
 
