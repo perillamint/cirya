@@ -13,7 +13,9 @@ defmodule Hedwig.Adapters.Telegram do
     {:ok, %State{opts: opts, robot: robot}}
   end
 
-  def handle_cast({:send, %{text: text} = msg}, state) do
+  def handle_cast({:send, msg}, state) do
+    Nadia.send_message(msg.room, msg.text)
+    {:noreply, state}
   end
 
   def handle_info({:message, raw_msg}, state) do
