@@ -1,18 +1,32 @@
 defmodule Hedwig.Adapters.Discord do
-  @moduledoc """
-  Documentation for Hedwig.Adapters.Discord.
-  """
+  @moduledoc false
+  use Hedwig.Adapter
 
-  @doc """
-  Hello world.
+  defmodule State do
+    defstruct opts: nil,
+      robot: nil
+  end
 
-  ## Examples
+  def init({robot, opts}) do
+    {:ok, %State{opts: opts, robot: robot}}
+  end
 
-      iex> Hedwig.Adapters.Discord.hello
-      :world
+  def handle_cast({:send, msg}, state) do
+    # TODO: Impl this
+    {:noreply, state}
+  end
 
-  """
-  def hello do
-    :world
+  def handle_cast({:reply, msg = %Hedwig.Message{}}, state) do
+    # TODO: Impl this
+    {:noreply, state}
+  end
+
+  def handle_info({:message, raw_msg}, state) do
+    # TODO: Impl this
+    {:noreply, state}
+  end
+
+  def handle_info({:command, cmd}, state) do
+    {:noreply, state}
   end
 end
