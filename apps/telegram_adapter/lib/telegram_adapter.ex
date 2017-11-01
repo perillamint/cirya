@@ -19,7 +19,7 @@ defmodule Hedwig.Adapters.Telegram do
   end
 
   def handle_cast({:reply, msg = %Hedwig.Message{}}, state) do
-    Nadia.send_message(msg.room, msg.text)
+    Nadia.send_message(msg.room, msg.text, reply_to_message_id: msg.ref)
     {:noreply, state}
   end
 
@@ -37,7 +37,7 @@ defmodule Hedwig.Adapters.Telegram do
     text = raw_msg.text # TODO: Append group title to text
 
     msg = %Hedwig.Message{
-      ref: make_ref(),
+      ref: raw_msg.message_id,
       room: raw_msg.chat.id,
       robot: state.robot,
       user: user,
