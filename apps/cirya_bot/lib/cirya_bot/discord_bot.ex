@@ -14,7 +14,12 @@ defmodule CiryaBot.Robot.Discord do
   end
 
   def handle_in(%Hedwig.Message{} = msg, state) do
-    IO.inspect(msg)
+    msg = case msg.user do
+            user = %Hedwig.User{} ->
+              %{msg|user: %{msg.user| id: msg.user.id <> "@discord"}}
+            id ->
+              %{msg|user: %Hedwig.User{id: msg.user <> "@discord", name: msg.user}}
+          end
     {:dispatch, msg, state}
   end
 
