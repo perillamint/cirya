@@ -20,6 +20,7 @@ defmodule CiryaBot.Robot.Discord do
             id ->
               %{msg|user: %Hedwig.User{id: msg.user <> "@discord", name: msg.user}}
           end
+    GenServer.cast(CiryaBot.Router, {:message, msg})
     {:dispatch, msg, state}
   end
 

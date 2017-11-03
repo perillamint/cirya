@@ -12,7 +12,8 @@ defmodule CiryaBot.Application do
       # {CiryaBot.Worker, arg},
       {CiryaBot.Robot.Console, []},
       {CiryaBot.Robot.Telegram, []},
-      {CiryaBot.Robot.Discord, []}
+      {CiryaBot.Robot.Discord, []},
+      {CiryaBot.Router, [CiryaBot.Router]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html

@@ -20,7 +20,8 @@ defmodule CiryaBot.Robot.Telegram do
             id ->
               %{msg|user: %Hedwig.User{id: msg.user <> "@telegram", name: msg.user}}
           end
-    IO.inspect(msg)
+
+    GenServer.cast(CiryaBot.Router, {:message, msg})
     {:dispatch, msg, state}
   end
 
