@@ -17,7 +17,8 @@ config :cirya_bot, CiryaBot.Robot.Telegram,
   aka: "/",
   responders: [
     {Hedwig.Responders.Help, []},
-    {Hedwig.Responders.Ping, []}
+    {Hedwig.Responders.Ping, []},
+    {CiryaBot.Responders.Admin, []}
   ]
 
 config :cirya_bot, CiryaBot.Robot.Discord,
