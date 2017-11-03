@@ -1,5 +1,6 @@
 defmodule CiryaBot.Robot.Console do
   use Hedwig.Robot, otp_app: :cirya_bot
+  use CiryaBot.RegisterBot
 
   def handle_connect(%{name: name} = state) do
     if :undefined == :global.whereis_name(name) do
