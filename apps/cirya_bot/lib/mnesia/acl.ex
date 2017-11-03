@@ -34,5 +34,10 @@ defdatabase CiryaBot.Mnesia.ACL do
         flags
       end).() |> Enum.uniq()
     end
+
+    def check_flag(self, flag) do
+      flags = get_flags(self)
+      Enum.member?(flags, flag)
+    end
   end
 end
