@@ -17,10 +17,11 @@ defmodule CiryaBot.Robot.Discord do
   def handle_in(%Hedwig.Message{} = msg, state) do
     msg = case msg.user do
             user = %Hedwig.User{} ->
-              %{msg|user: %{msg.user| id: msg.user.id <> "@discord"}}
+              %{msg|user: %{msg.user| id: user.id <> "@telegram"}}
             id ->
-              %{msg|user: %Hedwig.User{id: msg.user <> "@discord", name: msg.user}}
+              %{msg|user: %Hedwig.User{id: id <> "@telegram", name: msg.user}}
           end
+
     GenServer.cast(CiryaBot.Router, {:message, msg})
     {:dispatch, msg, state}
   end
