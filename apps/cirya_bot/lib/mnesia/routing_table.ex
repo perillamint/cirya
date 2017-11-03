@@ -22,10 +22,12 @@ defdatabase CiryaBot.Mnesia.RoutingTable do
     }
 
     def get_destinations(self) do
-      Enum.map_reduce(self.destinations, [], fn(destination, acc) ->
+      {_, destinations} = Enum.map_reduce(self.destinations, [], fn(destination, acc) ->
         dest = Destination.read(destination)
         {dest, acc ++ [dest]}
       end)
+
+      destinations
     end
   end
 end

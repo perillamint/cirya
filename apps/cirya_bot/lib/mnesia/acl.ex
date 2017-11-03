@@ -30,7 +30,9 @@ defdatabase CiryaBot.Mnesia.ACL do
       Enum.map_reduce(self.roles, [], fn(role, acc) ->
         flags = Role.read(role).flags
         {flags, acc ++ flags}
-      end) |> Enum.uniq()
+      end) |> (fn({_, flags}) ->
+        flags
+      end).() |> Enum.uniq()
     end
   end
 end
