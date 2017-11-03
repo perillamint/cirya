@@ -20,5 +20,12 @@ defdatabase CiryaBot.Mnesia.RoutingTable do
       room: binary,
       destinations: list(non_neg_integer)
     }
+
+    def get_destinations(self) do
+      Enum.map_reduce(self.destinations, [], fn(destination, acc) ->
+        dest = Destination.read(destination)
+        {dest, acc ++ [dest]}
+      end)
+    end
   end
 end
