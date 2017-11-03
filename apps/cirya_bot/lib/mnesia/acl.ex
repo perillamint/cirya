@@ -14,15 +14,11 @@ defdatabase CiryaBot.Mnesia.ACL do
   end
 
   deftable User, [
-    {:id, autoincrement},
-    :svc_name,
-    :username,
+    :userid,
     :roles
-  ], type: :ordered_set, index: [:svc_name, :username] do
+  ], type: :set do
     @type t :: %User{
-      id: non_neg_integer,
-      svc_name: String.t,
-      username: String.t,
+      userid: String.t,
       roles: list(non_neg_integer)
     }
 
