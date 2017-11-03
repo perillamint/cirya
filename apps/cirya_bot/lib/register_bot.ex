@@ -6,16 +6,13 @@ defmodule CiryaBot.RegisterBot do
           id: __MODULE__,
           restart: :permanent,
           shutdown: 5000,
-          start: {__MODULE__, :start_link_hook, [opts]},
+          start: {__MODULE__, :start_link_hook, [__MODULE__, opts]},
           type: :worker
         }
       end
 
-      def start_link_hook(opts) do
-        res = start_link(opts)
-        {:ok, pid} = res
-        Process.register(pid, __MODULE__)
-        res
+      def start_link_hook(robot, opts) do
+        GenServer.start_link(__MODULE__, {robot, opts}, [{:name, __MODULE__}])
       end
     end
   end
