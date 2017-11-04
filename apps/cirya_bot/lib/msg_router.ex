@@ -36,7 +36,7 @@ defmodule CiryaBot.Router do
     svc = String.to_atom(svcname)
 
     targets = Amnesia.transaction do
-      src = RouteSrc.where(svc_name == svc) |> Amnesia.Selection.values
+      src = RouteSrc.where(svc_name == svc and room == msg.room) |> Amnesia.Selection.values
       case src do
         [] ->
           []
@@ -45,7 +45,14 @@ defmodule CiryaBot.Router do
       end
     end
 
-    #Hedwig.Robot.send(CiryaBot.Robot.Telegram, msg)
+    targets |> Enum.each(fn(%RouteDst{svc_name: target_svc, room: target_room}) ->
+      target = get_route_target(target_svc)
+      msg_new = %{msg|room: target_room}
+
+      # TODO: Append original room to text msg
+      Hedwig.Robot.Send(target, msg_new)
+    end)
+
     {:noreply, state}
   end
 end
