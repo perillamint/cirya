@@ -1,10 +1,11 @@
+require Exquisite
 use Amnesia
 
 defdatabase CiryaBot.Mnesia.RoutingTable do
   deftable Destination, [{:id, autoincrement}, :svc_name, :room], type: :ordered_set do
     @type t :: %Destination{
       id: non_neg_integer,
-      svc_name: String.t,
+      svc_name: atom,
       room: binary
     }
   end
@@ -16,7 +17,8 @@ defdatabase CiryaBot.Mnesia.RoutingTable do
     :destinations
   ], type: :ordered_set, index: [:svc_name, :room] do
     @type t :: %Source{
-      svc_name: String.t,
+      id: non_neg_integer,
+      svc_name: atom,
       room: binary,
       destinations: list(non_neg_integer)
     }
