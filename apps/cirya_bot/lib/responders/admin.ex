@@ -26,6 +26,6 @@ defmodule CiryaBot.Responders.Admin do
       acc <> elem <> ", "
     end) |> String.slice(0 .. -3)
 
-    reply msg, flags
+    reply msg, "[" <> flags <> "]"
   end
 end

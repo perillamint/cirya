@@ -30,6 +30,13 @@ config :cirya_bot, CiryaBot.Robot.Discord,
     {Hedwig.Responders.Ping, []}
   ]
 
+config :cirya_bot, CiryaBot.Router,
+  route_map: [
+    {:console, CiryaBot.Robot.Console},
+    {:telegram, CiryaBot.Robot.Telegram},
+    {:discord, CiryaBot.Robot.Discord}
+  ]
+
 # This configuration is loaded before any dependency and is restricted
 # to this project. If another project depends on this project, this
 # file won't be loaded nor affect the parent project. For this reason,
