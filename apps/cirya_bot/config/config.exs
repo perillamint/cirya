@@ -8,7 +8,10 @@ config :cirya_bot, CiryaBot.Robot.Console,
   aka: "/",
   responders: [
     {Hedwig.Responders.Help, []},
-    {Hedwig.Responders.Ping, []}
+    {Hedwig.Responders.Ping, []},
+    {CiryaBot.Responders.Admin, []},
+    {CiryaBot.Responders.RoomManager, []},
+    {CiryaBot.Responders.LinkManager, []}
   ]
 
 config :cirya_bot, CiryaBot.Robot.Telegram,
@@ -18,7 +21,9 @@ config :cirya_bot, CiryaBot.Robot.Telegram,
   responders: [
     {Hedwig.Responders.Help, []},
     {Hedwig.Responders.Ping, []},
-    {CiryaBot.Responders.Admin, []}
+    {CiryaBot.Responders.Admin, []},
+    {CiryaBot.Responders.RoomManager, []},
+    {CiryaBot.Responders.LinkManager, []}
   ]
 
 config :cirya_bot, CiryaBot.Robot.Discord,
@@ -27,7 +32,10 @@ config :cirya_bot, CiryaBot.Robot.Discord,
   aka: "/",
   responders: [
     {Hedwig.Responders.Help, []},
-    {Hedwig.Responders.Ping, []}
+    {Hedwig.Responders.Ping, []},
+    {CiryaBot.Responders.Admin, []},
+    {CiryaBot.Responders.RoomManager, []},
+    {CiryaBot.Responders.LinkManager, []}
   ]
 
 config :cirya_bot, CiryaBot.Router,
