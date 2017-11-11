@@ -14,12 +14,14 @@ defdatabase CiryaBot.Mnesia.RoutingTable do
     {:id, autoincrement},
     :svc_name,
     :room,
+    :alias,
     :destinations
   ], type: :ordered_set, index: [:svc_name, :room] do
     @type t :: %Source{
       id: non_neg_integer,
       svc_name: atom,
       room: binary,
+      alias: String.t,
       destinations: list(non_neg_integer)
     }
 
