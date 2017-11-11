@@ -10,10 +10,11 @@ defmodule CiryaBot.Application do
     children = [
       # Starts a worker by calling: CiryaBot.Worker.start_link(arg)
       # {CiryaBot.Worker, arg},
-      {CiryaBot.Robot.Console, []},
+      #{CiryaBot.Robot.Console, []},
       {CiryaBot.Robot.Telegram, []},
       {CiryaBot.Robot.Discord, []},
-      {CiryaBot.Router, [CiryaBot.Router]}
+      {CiryaBot.Router, [CiryaBot.Router]},
+      {CiryaBot.PairKey, [CiryaBot.PairKey]}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
