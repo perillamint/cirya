@@ -28,6 +28,7 @@ defmodule CiryaBot.Responders.LinkManager do
           destinations = entry |> Room.get_destinations()
           |> Enum.reduce([], fn(routedst, acc) ->
             %Room{
+              id: room_id,
               svc_name: target_svc,
               room: target_room,
               alias: target_room_alias
@@ -38,10 +39,10 @@ defmodule CiryaBot.Responders.LinkManager do
                          nil ->
                            to_string(target_room)
                          x ->
-                           to_string(target_room) <> "(" <> target_room_alias <> ")"
+                           to_string(target_room) <> "(" <> x <> ")"
                        end
 
-            acc ++ ["svc: " <> svcname <> " room:" <> roomname]
+            acc ++ ["id: " <> to_string(room_id) <> " svc: " <> svcname <> " room:" <> roomname]
           end)
           |> Enum.reduce("", fn(entry, acc) ->
             acc <> entry <> "\n"
@@ -57,14 +58,33 @@ defmodule CiryaBot.Responders.LinkManager do
   @usage """
   hedwig startlink - Start link
   """
-  respond ~r/startlink$/i, msg do
+  respond ~r/startlink (?<room_id>[0-9]*)/, msg do
     reply msg, "Not ready yet"
   end
 
   @usage """
   hedwig killlink - Kill link
   """
-  respond ~r/killlink$/i, msg do
-    reply msg, "Not ready yet"
+  respond ~r/killlink (?<room_id>[0-9]*)/i, msg do
+    userid = msg.user.id
+    {:ok, svcname} = userid |> String.split("@") |> Enum.fetch(-1)
+    svc = String.to_atom(svcname)
+    {room_id, _} = Integer.parse(msg.matches["room_id"])
+
+    replymsg = Amnesia.transaction do
+      src = Room.where(svc_name == svc and room == msg.room) |> Amnesia.Selection.values
+
+      case src do
+        [] ->
+          "No room found on DB."
+        [entry] ->
+          %{entry|destinations: entry.destinations |> List.delete(room_id)}
+          |> Room.write()
+
+          "Link removed."
+      end
+    end
+
+    reply msg, replymsg
   end
 end
