@@ -50,7 +50,7 @@ defmodule CiryaBot.Router do
       msg_new = %{msg|room: target_room}
 
       # TODO: Append original room to text msg
-      Hedwig.Robot.Send(target, msg_new)
+      Hedwig.Robot.send(target, msg_new)
     end)
 
     {:noreply, state}
