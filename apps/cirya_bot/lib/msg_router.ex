@@ -3,10 +3,9 @@ defmodule CiryaBot.Router do
   use Amnesia
   require Exquisite
 
-  alias CiryaBot.Mnesia.RoutingTable.Source, as: RouteSrc
-  alias CiryaBot.Mnesia.RoutingTable.Destination, as: RouteDst
+  alias CiryaBot.Mnesia.RoutingTable.Room, as: Room
 
-  require RouteSrc
+  require Room
 
   defmodule State do
     defstruct foo: nil
@@ -36,16 +35,16 @@ defmodule CiryaBot.Router do
     svc = String.to_atom(svcname)
 
     targets = Amnesia.transaction do
-      src = RouteSrc.where(svc_name == svc and room == msg.room) |> Amnesia.Selection.values
+      src = Room.where(svc_name == svc and room == msg.room) |> Amnesia.Selection.values
       case src do
         [] ->
           []
         [entry] ->
-          entry |> RouteSrc.get_destinations()
+          entry |> Room.get_destinations()
       end
     end
 
-    targets |> Enum.each(fn(%RouteDst{svc_name: target_svc, room: target_room}) ->
+    targets |> Enum.each(fn(%Room{svc_name: target_svc, room: target_room}) ->
       {:ok, target} = get_route_target(target_svc)
       msg_new = %{msg|room: target_room}
 

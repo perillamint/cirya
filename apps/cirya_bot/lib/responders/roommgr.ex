@@ -7,9 +7,9 @@ defmodule CiryaBot.Responders.RoomManager do
   use Hedwig.Responder
   require Exquisite
 
-  alias CiryaBot.Mnesia.RoutingTable.Source, as: RouteSrc
+  alias CiryaBot.Mnesia.RoutingTable.Room, as: Room
 
-  require RouteSrc
+  require Room
 
   @usage """
   hedwig setalias <alias> - Set room alias
@@ -20,12 +20,12 @@ defmodule CiryaBot.Responders.RoomManager do
     svc = String.to_atom(svcname)
 
     replymsg = Amnesia.transaction do
-      src = RouteSrc.where(svc_name == svc and room == msg.room) |> Amnesia.Selection.values
+      src = Room.where(svc_name == svc and room == msg.room) |> Amnesia.Selection.values
       case src do
         [] ->
           "No room found on DB. Cannot set alias."
         [entry] ->
-          %{entry|alias: msg.matches["alias"]} |> RouteSrc.write
+          %{entry|alias: msg.matches["alias"]} |> Room.write
           "Room found on DB. Aliased as: " <> msg.matches["alias"]
       end
     end
@@ -42,16 +42,16 @@ defmodule CiryaBot.Responders.RoomManager do
     svc = String.to_atom(svcname)
 
     replymsg = Amnesia.transaction do
-      src = RouteSrc.where(svc_name == svc and room == msg.room) |> Amnesia.Selection.values
+      src = Room.where(svc_name == svc and room == msg.room) |> Amnesia.Selection.values
 
       case src do
         [] ->
-          %RouteSrc{
+          %Room{
             svc_name: svc,
             room: msg.room,
             alias: nil,
             destinations: []
-          } |> RouteSrc.write()
+          } |> Room.write()
           "Room created."
         [entry] ->
           "Room already exists!"
