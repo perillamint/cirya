@@ -24,3 +24,6 @@ apps/telegram_adapter/config/config.exs
 
 # Mnesia DB
 Mnesia.*/*
+
+# Editor files
+.#*
