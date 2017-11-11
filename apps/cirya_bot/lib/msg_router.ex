@@ -46,7 +46,7 @@ defmodule CiryaBot.Router do
     end
 
     targets |> Enum.each(fn(%RouteDst{svc_name: target_svc, room: target_room}) ->
-      target = get_route_target(target_svc)
+      {:ok, target} = get_route_target(target_svc)
       msg_new = %{msg|room: target_room}
 
       # TODO: Append original room to text msg
