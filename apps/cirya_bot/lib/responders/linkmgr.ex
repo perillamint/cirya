@@ -58,8 +58,49 @@ defmodule CiryaBot.Responders.LinkManager do
   @usage """
   hedwig startlink - Start link
   """
-  respond ~r/startlink (?<room_id>[0-9]*)/, msg do
-    reply msg, "Not ready yet"
+  respond ~r/startlink$/, msg do
+    userid = msg.user.id
+    {:ok, svcname} = userid |> String.split("@") |> Enum.fetch(-1)
+    svc = String.to_atom(svcname)
+
+    replymsg = Amnesia.transaction do
+      src = Room.where(svc_name == svc and room == msg.room) |> Amnesia.Selection.values
+
+      case src do
+        [] ->
+          "No room foundon DB. Please run /createroom first."
+        [entry] ->
+          pairkey = GenServer.call(CiryaBot.PairKey, {:getkey, entry.id})
+          "Use /acceptlink " <> pairkey <> " in other chat room to setup link."
+      end
+    end
+
+    reply msg, replymsg
+  end
+
+  @usage """
+  hedwig acceptlink - Pair room using given link code
+  """
+  respond ~r/acceptlink (?<pairkey>[a-zA-Z0-9]*)/, msg do
+    userid = msg.user.id
+    {:ok, svcname} = userid |> String.split("@") |> Enum.fetch(-1)
+    svc = String.to_atom(svcname)
+
+    replymsg = Amnesia.transaction do
+      src = Room.where(svc_name == svc and room == msg.room) |> Amnesia.Selection.values
+
+      case src do
+        [] ->
+          "No room found on DB. Please run /createroom."
+        [entry] ->
+          room_id = GenServer.call(CiryaBot.PairKey, {:getpair, msg.matches["pairkey"]})
+          room = Room.read(room_id)
+          %{room|destinations: room.destinations ++ [entry.id] |> Enum.uniq()} |> Room.write
+          "Link established."
+      end
+    end
+
+    reply msg, replymsg
   end
 
   @usage """
