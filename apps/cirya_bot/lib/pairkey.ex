@@ -3,6 +3,7 @@ defmodule CiryaBot.PairKey do
 
   @ttl 300
   @timeout 10000
+  @bits 64
 
   defmodule State do
     defstruct table: nil
@@ -22,7 +23,7 @@ defmodule CiryaBot.PairKey do
 
   def handle_call({:getkey, room}, _from, state) do
     # TODO: Run RNG and write it to ETS
-    key = "superduperkey"
+    key = EntropyString.random_string(@bits)
     ts = :os.system_time(:seconds)
     :ets.insert(state.table, {key, room, ts})
 
@@ -34,6 +35,7 @@ defmodule CiryaBot.PairKey do
              [] ->
                nil
              [{_, room, _}] ->
+               :ets.delete(state.table, key)
                room
            end
 
