@@ -14,7 +14,7 @@ defmodule CiryaBot.Responders.RoomManager do
   @usage """
   hedwig setalias <alias> - Set room alias
   """
-  respond ~r/setalias (?<alias>.*)/, msg do
+  respond ~r/setalias (?<alias>[^ ]*)/, msg do
     userid = msg.user.id
     {:ok, svcname} = userid |> String.split("@") |> Enum.fetch(-1)
     svc = String.to_atom(svcname)
