@@ -28,10 +28,8 @@ defmodule CiryaBot.Router do
   end
 
   def handle_cast({:message, %Hedwig.Message{} = msg}, state) do
-    IO.inspect(msg)
     userid = msg.user.id;
     {:ok, svcname} = userid |> String.split("@") |> Enum.fetch(-1)
-
     svc = String.to_atom(svcname)
 
     targets = Amnesia.transaction do
@@ -44,11 +42,25 @@ defmodule CiryaBot.Router do
       end
     end
 
+    roomname = Amnesia.transaction do
+      src = Room.where(svc_name == svc and room == msg.room) |> Amnesia.Selection.values
+
+      case src do
+        [] ->
+          to_string(msg.room) <> "(" <> svcname <> ")"
+        [entry] ->
+          case entry.alias do
+            nil ->
+              to_string(msg.room) <> "(" <> svcname <> ")"
+            x ->
+              x
+          end
+      end
+    end
+
     targets |> Enum.each(fn(%Room{svc_name: target_svc, room: target_room}) ->
       {:ok, target} = get_route_target(target_svc)
-      msg_new = %{msg|room: target_room}
-
-      # TODO: Append original room to text msg
+      msg_new = %{msg|room: target_room, text: userid <> "#" <> roomname <> ": " <> msg.text}
       Hedwig.Robot.send(target, msg_new)
     end)
 
