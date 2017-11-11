@@ -29,6 +29,7 @@ defmodule CiryaBot.Mixfile do
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
       # {:sibling_app_in_umbrella, in_umbrella: true},
+      {:entropy_string, "~> 1.0.0"},
       {:amnesia, "~> 0.2.7"},
       {:hedwig, "~> 1.0"},
       {:telegram_adapter, in_umbrella: true},

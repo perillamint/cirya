@@ -4,6 +4,7 @@
   "chacha20": {:hex, :chacha20, "1.0.1", "4f5eb7ec715b63f90b5f152b91cc490382753ad08827960017c0660c8e30f613", [:mix], []},
   "curve25519": {:hex, :curve25519, "1.0.1", "35a57c0b571a23a35090a724974646ff729bdb161f2bc9a8cdb152ba0c9a29cd", [:mix], []},
   "ed25519": {:hex, :ed25519, "1.1.0", "1bb574733b2a2b429bff80ff001002063af3c645f1a54508a53ceeccfd3095c4", [:mix], []},
+  "entropy_string": {:hex, :entropy_string, "1.0.4", "11b11b879f871defda3c51f74defaa7f54d82fda754a46f29a8e0f165a9888d3", [], [], "hexpm"},
   "equivalex": {:hex, :equivalex, "1.0.1", "19a28351e60272a19a4ba05c12f1f1d87fe6146d21531ec7d0783e1bc6a8179c", [:mix], []},
   "exquisite": {:hex, :exquisite, "0.1.8", "ee8f56aae477287ce5e7dfcbc163a420cccbb73e680a6d80a09203e9ef514fa4", [:mix], []},
   "gen_stage": {:hex, :gen_stage, "0.12.2", "e0e347cbb1ceb5f4e68a526aec4d64b54ad721f0a8b30aa9d28e0ad749419cbb", [:mix], []},
