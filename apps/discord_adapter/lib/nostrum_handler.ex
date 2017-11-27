@@ -5,29 +5,34 @@ defmodule Hedwig.Adapters.Discord.NostrumHandler do
   require Logger
 
   defmodule State do
-    defstruct parent: nil
+    defstruct parent: nil,
+      myid: nil
   end
 
   def start_link(args) do
-    GenServer.start_link(__MODULE__, [self(), args], [{:name, __MODULE__}])
-  end
+    {:ok, myself} = Api.get_current_user()
+    {myid, _} = Integer.parse(myself["id"]);
 
-  def init([parent, config]) do
-    Consumer.start_link(__MODULE__)
-    {:ok, %State{parent: parent}}
+    state = %State{
+      parent: self(),
+      myid: myid
+    }
+
+    GenStage.start_link(Nostrum.Consumer, %{mod: __MODULE__, state: state})
   end
 
   def handle_event({:MESSAGE_CREATE, {msg}, ws_state}, state) do
     channel = case Api.get_channel(msg.channel_id) do
                 {:ok, channel} ->
-                  "#" <> channel.name
-                {:error, msg} ->
-                  "unknown"
+                  %{id: msg.channel_id, title: "#" <> channel["name"]}
+                {:error, err} ->
+                  IO.inspect(err)
+                  %{id: msg.channel_id, title: "unknown"}
               end
 
-    IO.inspect(channel)
-    #send(state.parent, {:message, msg});
-    IO.inspect(msg)
+    if state.myid != msg.author.id do
+      send(state.parent, {:message, channel, msg});
+    end
     {:ok, state}
   end
 

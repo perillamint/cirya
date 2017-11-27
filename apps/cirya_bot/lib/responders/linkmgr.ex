@@ -11,6 +11,17 @@ defmodule CiryaBot.Responders.LinkManager do
 
   require Room
 
+  defp room2str(room) do
+    title = case room.title do
+              nil ->
+                "nil"
+              x ->
+                to_string(x)
+            end
+
+    title <> "(" <> to_string(room.id) <> ")"
+  end
+
   @usage """
   hedwig showlink - Show chat link status
   """
@@ -37,9 +48,9 @@ defmodule CiryaBot.Responders.LinkManager do
             svcname = to_string(target_svc)
             roomname = case target_room_alias do
                          nil ->
-                           to_string(target_room)
+                           room2str(target_room)
                          x ->
-                           to_string(target_room) <> "(" <> x <> ")"
+                           room2str(target_room) <> "(" <> x <> ")"
                        end
 
             acc ++ ["id: " <> to_string(room_id) <> " svc: " <> svcname <> " room:" <> roomname]
