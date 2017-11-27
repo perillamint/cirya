@@ -28,7 +28,8 @@ defmodule Hedwig.Adapters.Discord.Mixfile do
       # {:dep_from_hexpm, "~> 0.3.0"},
       # {:dep_from_git, git: "https://github.com/elixir-lang/my_dep.git", tag: "0.1.0"},
       # {:sibling_app_in_umbrella, in_umbrella: true},
-      {:alchemy, "~> 0.6.0", hex: :discord_alchemy}
+      {:nostrum, "~> 0.2.1"},
+      {:gun, git: "https://github.com/ninenines/gun.git", ref: "dd1bfe4d6f9fb277781d922aa8bbb5648b3e6756", override: true}
     ]
   end
 end
