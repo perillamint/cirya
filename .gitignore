@@ -21,6 +21,7 @@ erl_crash.dump
 
 # Private config file
 apps/telegram_adapter/config/config.exs
+apps/discord_adapter/config/config.exs
 
 # Mnesia DB
 Mnesia.*/*
