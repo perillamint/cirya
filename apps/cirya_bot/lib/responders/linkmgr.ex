@@ -20,7 +20,7 @@ defmodule CiryaBot.Responders.LinkManager do
     svc = String.to_atom(svcname)
 
     replymsg = Amnesia.transaction do
-      src = Room.where(svc_name == svc and room == msg.room) |> Amnesia.Selection.values
+      src = Room.where(svc_name == svc and room_id == msg.room.id) |> Amnesia.Selection.values
       case src do
         [] ->
           "Room not registered."
@@ -64,7 +64,7 @@ defmodule CiryaBot.Responders.LinkManager do
     svc = String.to_atom(svcname)
 
     replymsg = Amnesia.transaction do
-      src = Room.where(svc_name == svc and room == msg.room) |> Amnesia.Selection.values
+      src = Room.where(svc_name == svc and room_id == msg.room.id) |> Amnesia.Selection.values
 
       case src do
         [] ->
@@ -87,7 +87,7 @@ defmodule CiryaBot.Responders.LinkManager do
     svc = String.to_atom(svcname)
 
     replymsg = Amnesia.transaction do
-      src = Room.where(svc_name == svc and room == msg.room) |> Amnesia.Selection.values
+      src = Room.where(svc_name == svc and room_id == msg.room.id) |> Amnesia.Selection.values
 
       case src do
         [] ->
@@ -113,7 +113,7 @@ defmodule CiryaBot.Responders.LinkManager do
     {room_id, _} = Integer.parse(msg.matches["room_id"])
 
     replymsg = Amnesia.transaction do
-      src = Room.where(svc_name == svc and room == msg.room) |> Amnesia.Selection.values
+      src = Room.where(svc_name == svc and room_id == msg.room.id) |> Amnesia.Selection.values
 
       case src do
         [] ->

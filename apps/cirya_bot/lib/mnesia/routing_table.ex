@@ -5,13 +5,15 @@ defdatabase CiryaBot.Mnesia.RoutingTable do
   deftable Room, [
     {:id, autoincrement},
     :svc_name,
+    :room_id,
     :room,
     :alias,
     :destinations
-  ], type: :ordered_set, index: [:svc_name, :room] do
+  ], type: :ordered_set, index: [:svc_name, :room_id] do
     @type t :: %Room{
       id: non_neg_integer,
       svc_name: atom,
+      room_id: binary,
       room: binary,
       alias: String.t,
       destinations: list(non_neg_integer)

@@ -20,7 +20,7 @@ defmodule CiryaBot.Responders.RoomManager do
     svc = String.to_atom(svcname)
 
     replymsg = Amnesia.transaction do
-      src = Room.where(svc_name == svc and room == msg.room) |> Amnesia.Selection.values
+      src = Room.where(svc_name == svc and room_id == msg.room.id) |> Amnesia.Selection.values
       case src do
         [] ->
           "No room found on DB. Cannot set alias."
@@ -42,12 +42,13 @@ defmodule CiryaBot.Responders.RoomManager do
     svc = String.to_atom(svcname)
 
     replymsg = Amnesia.transaction do
-      src = Room.where(svc_name == svc and room == msg.room) |> Amnesia.Selection.values
+      src = Room.where(svc_name == svc and room_id == msg.room.id) |> Amnesia.Selection.values
 
       case src do
         [] ->
           %Room{
             svc_name: svc,
+            room_id: msg.room.id,
             room: msg.room,
             alias: nil,
             destinations: []

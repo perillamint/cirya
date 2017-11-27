@@ -33,7 +33,7 @@ defmodule CiryaBot.Router do
     svc = String.to_atom(svcname)
 
     targets = Amnesia.transaction do
-      src = Room.where(svc_name == svc and room == msg.room) |> Amnesia.Selection.values
+      src = Room.where(svc_name == svc and room_id == msg.room.id) |> Amnesia.Selection.values
       case src do
         [] ->
           []
@@ -43,15 +43,15 @@ defmodule CiryaBot.Router do
     end
 
     roomname = Amnesia.transaction do
-      src = Room.where(svc_name == svc and room == msg.room) |> Amnesia.Selection.values
+      src = Room.where(svc_name == svc and room_id == msg.room.id) |> Amnesia.Selection.values
 
       case src do
         [] ->
-          to_string(msg.room) <> "(" <> svcname <> ")"
+          to_string(msg.room.title) <> "(" <> svcname <> ")"
         [entry] ->
           case entry.alias do
             nil ->
-              to_string(msg.room) <> "(" <> svcname <> ")"
+              to_string(msg.room.title) <> "(" <> svcname <> ")"
             x ->
               x
           end

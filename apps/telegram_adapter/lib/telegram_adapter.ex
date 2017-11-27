@@ -14,12 +14,12 @@ defmodule Hedwig.Adapters.Telegram do
   end
 
   def handle_cast({:send, msg}, state) do
-    Nadia.send_message(msg.room, msg.text)
+    Nadia.send_message(msg.room.id, msg.text)
     {:noreply, state}
   end
 
   def handle_cast({:reply, msg = %Hedwig.Message{}}, state) do
-    Nadia.send_message(msg.room, msg.text, reply_to_message_id: msg.ref)
+    Nadia.send_message(msg.room.id, msg.text, reply_to_message_id: msg.ref)
     {:noreply, state}
   end
 
@@ -46,7 +46,7 @@ defmodule Hedwig.Adapters.Telegram do
 
     msg = %Hedwig.Message{
       ref: raw_msg.message_id,
-      room: raw_msg.chat.id,
+      room: %{id: raw_msg.chat.id, title: raw_msg.chat.title},
       robot: state.robot,
       user: user,
       text: text,
