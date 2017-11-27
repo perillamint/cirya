@@ -42,7 +42,12 @@ defmodule Hedwig.Adapters.Telegram do
                user
            end
 
-    text = raw_msg.text # TODO: Append group title to text
+    text = case raw_msg.text do
+             nil ->
+               "[WIP: Media]"
+             x ->
+               x
+           end
 
     msg = %Hedwig.Message{
       ref: raw_msg.message_id,
