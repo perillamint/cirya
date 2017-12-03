@@ -16,3 +16,9 @@ import_config "../apps/*/config/config.exs"
 #       format: "$date $time [$level] $metadata$message\n",
 #       metadata: [:user_id]
 
+config :nostrum,
+  token: "",
+  num_shards: :auto
+
+config :nadia,
+  token: ""
