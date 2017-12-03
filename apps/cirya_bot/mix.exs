@@ -18,6 +18,7 @@ defmodule CiryaBot.Mixfile do
   # Run "mix help compile.app" to learn about applications.
   def application do
     [
+      applications: [:hedwig],
       extra_applications: [:logger],
       mod: {CiryaBot.Application, []}
     ]
