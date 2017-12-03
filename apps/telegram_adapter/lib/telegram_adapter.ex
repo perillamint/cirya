@@ -16,6 +16,7 @@ defmodule Hedwig.Adapters.Telegram do
 
   def handle_cast({:send, msg}, state) do
     # Spawn child to handle message dispatch
+    # No need for spawn_link. Message will be lost when there is network disruption.
     spawn(fn ->
       Nadia.send_message(msg.room.id, msg.text)
     end)
@@ -24,6 +25,7 @@ defmodule Hedwig.Adapters.Telegram do
 
   def handle_cast({:reply, msg = %Hedwig.Message{}}, state) do
     # Spawn child to handle message dispatch
+    # No need for spawn_link. Message will be lost when there is network disruption.
     spawn(fn ->
       Nadia.send_message(msg.room.id, msg.text, reply_to_message_id: msg.ref)
     end)

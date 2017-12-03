@@ -14,6 +14,7 @@ defmodule Hedwig.Adapters.Discord do
   end
 
   def handle_cast({:send, msg}, state) do
+    # No need for spawn_link. Message will be lost when there is network disruption.
     spawn(fn ->
       Api.create_message(msg.room.id, msg.text)
     end)
@@ -21,6 +22,7 @@ defmodule Hedwig.Adapters.Discord do
   end
 
   def handle_cast({:reply, msg = %Hedwig.Message{}}, state) do
+    # No need for spawn_link. Message will be lost when there is network disruption.
     spawn(fn ->
       # TODO: Reply?
       Api.create_message(msg.room.id, msg.text)
