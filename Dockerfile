@@ -1,6 +1,6 @@
 FROM elixir:1.5-alpine
 
-RUN apk add --no-cache git
+RUN apk add --no-cache git bash
 
 ADD . /opt/cirya
 
@@ -10,4 +10,4 @@ RUN mix local.rebar --force
 RUN mix deps.get
 RUN mix release
 
-# TODO: RUN ADD
+CMD ['/opt/cirya/entrypoint.sh']
