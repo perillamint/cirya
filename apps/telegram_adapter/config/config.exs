@@ -10,11 +10,11 @@ use Mix.Config
 
 # You can configure your application as:
 #
-#     config :discord_adapter, key: :value
+#     config :telegram_adapter, key: :value
 #
 # and access this configuration in your application as:
 #
-#     Application.get_env(:discord_adapter, :key)
+#     Application.get_env(:telegram_adapter, :key)
 #
 # You can also configure a 3rd-party app:
 #
@@ -28,7 +28,3 @@ use Mix.Config
 # here (which is why it is important to import them last).
 #
 #     import_config "#{Mix.env}.exs"
-
-config :nostrum,
-  token: "REDACTED",
-  num_shards: :auto
