@@ -20,7 +20,7 @@ erl_crash.dump
 *.ez
 
 # Private config file
-/config/config.exs
+env.sh
 
 # Mnesia DB
 Mnesia.*/*
