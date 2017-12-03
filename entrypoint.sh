@@ -2,8 +2,9 @@
 
 APPNAME=cirya
 DBDIR=Mnesia.$APPNAME@$(hostname -f)
+SCHEMAFILE=$DBDIR/schema.DAT
 
-if [ ! -d $DBDIR ]; then
+if [ ! -f $SCHEMAFILE ]; then
     elixir --sname cirya -S mix amnesia.create -d CiryaBot.Mnesia.RoutingTable
     elixir --sname cirya -S mix amnesia.create -d CiryaBot.Mnesia.ACL
 fi
