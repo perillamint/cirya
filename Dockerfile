@@ -11,4 +11,4 @@ WORKDIR /opt/cirya
 RUN mix deps.get
 RUN mix release
 
-CMD ['/opt/cirya/entrypoint.sh']
+CMD /opt/cirya/entrypoint.sh
