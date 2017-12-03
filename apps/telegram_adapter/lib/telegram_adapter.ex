@@ -1,6 +1,7 @@
 defmodule Hedwig.Adapters.Telegram do
   @moduledoc false
   use Hedwig.Adapter
+  require Logger
 
   defmodule State do
     defstruct conn: nil,
@@ -14,12 +15,23 @@ defmodule Hedwig.Adapters.Telegram do
   end
 
   def handle_cast({:send, msg}, state) do
-    Nadia.send_message(msg.room.id, msg.text)
+    # Spawn child to handle message dispatch
+    spawn(fn ->
+      Nadia.send_message(msg.room.id, msg.text)
+    end)
     {:noreply, state}
   end
 
   def handle_cast({:reply, msg = %Hedwig.Message{}}, state) do
-    Nadia.send_message(msg.room.id, msg.text, reply_to_message_id: msg.ref)
+    # Spawn child to handle message dispatch
+    spawn(fn ->
+      Nadia.send_message(msg.room.id, msg.text, reply_to_message_id: msg.ref)
+    end)
+    {:noreply, state}
+  end
+
+  def handle_info({:message, nil}, state) do
+    Logger.warn('Telegram message is nil. Network failure?')
     {:noreply, state}
   end
 
