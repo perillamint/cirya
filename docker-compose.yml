@@ -1,0 +1,8 @@
+version: '3.4'
+
+services:
+  cirya:
+    build:
+      context: .
+    restart: always
+    env_file: './env.sh'
